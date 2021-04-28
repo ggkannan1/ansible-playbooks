@@ -1,0 +1,27 @@
+---
+- hosts: nodes
+  become: true
+  become_user: root
+  tasks:
+  - name: Install nginx
+    command: amazon-linux-extras install nginx1.12=latest -y
+    args:
+      creates: /sbin/nginx
+
+  - name: Insert index page
+    template:
+      src: index.html
+      dest: /usr/share/nginx/html/index.html
+    ignore_errors: yes
+    notify:
+      - Restart nginx
+
+  - name: Start nginx
+    service:
+      name: nginx
+      state: started
+  handlers:
+    - name: Restart nginx
+      service:
+         name: nginx
+         state: restarted

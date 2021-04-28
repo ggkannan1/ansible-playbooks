@@ -1,0 +1,11 @@
+---
+- hosts: nodes
+  become: yes
+  gather_facts: false
+  tasks:
+  - name: Create file with content example
+    copy:
+       dest: /home/ec2-user/myfile1.txt
+       content:
+             This file is written
+             using Ansible Playbook

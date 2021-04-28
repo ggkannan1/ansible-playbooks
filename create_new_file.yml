@@ -1,0 +1,8 @@
+---
+- hosts: nodes
+  become: true
+  tasks:
+  - name: create a file
+    file:
+       dest: /home/ec2-user/myfile.txt
+       state: touch

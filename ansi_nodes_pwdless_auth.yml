@@ -1,0 +1,33 @@
+---
+- hosts: nodes
+  become: true
+  become_user: root
+  tasks:
+  - name: create a ansi user
+    user:
+      name: ansi
+      password: ansi
+  - name: verify the password
+    command: passwd -x -1 ansi
+  - name: Give the permission to edit the sudoers file using root user
+    command: "{{item}}"
+    with_items:
+     - sudo chown root:root /etc/sudoers
+     - sudo chmod 0755 /etc/sudoers
+  - name: Add the ansi user to sudoers file
+    lineinfile:
+         path: /etc/sudoers
+         regexp: '^ansi ALL'
+         insertafter: '^## Allow root'
+         line: 'ansi ALL=(ALL) NOPASSWD: ALL'
+  - name: create .ssh dir and create authorized keys file using ansi user
+    shell: mkdir -p /home/ansi/.ssh && touch /home/ansi/.ssh/authorized_keys
+  - name: Update the permission for the new file
+    shell: chown ansi:ansi authorized_keys && chmod 600 authorized_keys
+    args:
+      chdir: /home/ansi/.ssh
+  - name: copy public key from ansi master to nodes authorized_keys
+    copy:
+       src: /home/ansi/.ssh/id_rsa.pub
+       dest: /home/ansi/.ssh/authorized_keys
+

@@ -1,0 +1,21 @@
+---
+- hosts: nodes
+  become: yes
+  tasks:
+  - name: download maven and install
+    shell: |
+      wget http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo
+      sed -i s/\$releasever/6/g /etc/yum.repos.d/epel-apache-maven.repo
+      yum install -y apache-maven
+    tags: install
+  - name: uninstall maven
+    command: yum autoremove -y apache-maven
+    tags: uninstall
+  - name: check maven version
+    command: mvn --version
+    register: mvnversion
+    tags: version
+  - name: print the maven version
+    debug:
+       var: mvnversion
+    tags: print

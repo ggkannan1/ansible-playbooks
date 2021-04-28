@@ -1,0 +1,9 @@
+---
+- hosts: 172.31.58.165
+  become: yes
+  tasks:
+  - name: Configuring java
+    ansible.builtin.expect:
+      command: alternatives --config java
+      responses:
+        (?i) number: "1"

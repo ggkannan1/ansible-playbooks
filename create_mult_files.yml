@@ -1,0 +1,13 @@
+---
+- hosts: nodes
+  become: true
+  tasks:
+  - name: create a file
+    file: 
+       dest: /home/ec2-user/{{ item }}
+       state: touch
+       mode: 660
+    with_items:
+         - file1.txt
+         - file2.txt
+         - file3.txt

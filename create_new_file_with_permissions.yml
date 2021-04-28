@@ -1,0 +1,11 @@
+---
+- hosts: nodes
+  become: yes
+  gather_facts: false
+  tasks:
+  - name: Create new file with permissions example
+    file:
+      dest: /home/ec2-user/myfile2.txt
+      state: touch
+      mode: 0777
+      owner: ec2-user

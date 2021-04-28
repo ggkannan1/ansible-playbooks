@@ -1,0 +1,18 @@
+---
+- hosts: ubuntu
+  become: true
+  gather_facts: false
+  tasks:
+  - name: install git
+    apt:
+      name: git
+      state: present
+    tags: install
+  - name: uninstall git
+    apt:
+      name: git
+      state: absent
+    tags: uninstall
+  - name: check Git version
+    command: git --version
+    tags: version

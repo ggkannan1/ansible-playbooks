@@ -1,0 +1,10 @@
+- hosts: master
+  become: true
+  gather_facts: false
+  tasks:
+  - name: install git
+    yum:
+      name: git
+      state: present
+  - name: check Git version
+    command: git --version
